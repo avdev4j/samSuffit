@@ -26,7 +26,7 @@ const clientFiles = {
             path: MAIN_SRC_DIR,
             templates: [
                 { file: 'content/images/daily-bugle.png', method: 'copy' },
-                { file: 'content/images/logo-jhipster.png', method: 'copy' }
+                { file: 'content/images/logo-daily.png', method: 'copy' }
             ]
         }
     ]
@@ -35,6 +35,20 @@ const clientFiles = {
 function writeFiles() {
     this.writeFilesToDisk(clientFiles, this, false, 'angular');
     addGlobalSCSSStyle.call(this, "@import 'daily';");
+    changeJhipsterLogoToDailyLogo.call(this);
+    cleanJhipsterFiles.call(this);
+}
+
+function changeJhipsterLogoToDailyLogo() {
+    this.replaceContent(
+        `${ANGULAR_DIR}layouts/navbar/navbar.scss`,
+        "'../../../content/images/logo-jhipster.png'",
+        "'../../../content/images/logo-daily.png'"
+    );
+}
+
+function cleanJhipsterFiles() {
+    this.fs.delete(`${MAIN_SRC_DIR}content/images/logo-jhipster.png`);
 }
 
 /**
