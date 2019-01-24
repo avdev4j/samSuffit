@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
+const prompts = require('./prompts');
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -20,66 +21,41 @@ module.exports = class extends ClientGenerator {
     }
 
     get initializing() {
-        /**
-         * Any method beginning with _ can be reused from the superclass `ClientGenerator`
-         *
-         * There are multiple ways to customize a phase from JHipster.
-         *
-         * 1. Let JHipster handle a phase, blueprint doesnt override anything.
-         * ```
-         *      return super._initializing();
-         * ```
-         *
-         * 2. Override the entire phase, this is when the blueprint takes control of a phase
-         * ```
-         *      return {
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *          myAnotherCustomInitPhaseStep(){
-         *              // Do all your stuff here
-         *          }
-         *      };
-         * ```
-         *
-         * 3. Partially override a phase, this is when the blueprint gets the phase from JHipster and customizes it.
-         * ```
-         *      const phaseFromJHipster = super._initializing();
-         *      const myCustomPhaseSteps = {
-         *          displayLogo() {
-         *              // override the displayLogo method from the _initializing phase of JHipster
-         *          },
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *      }
-         *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
-         * ```
-         */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const phaseFromSam = {
+            setupSamconsts() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.theme = configuration.get('theme') || this.configOptions.theme;
+            }
+        };
+
+        return Object.assign(phaseFromJHipster, phaseFromSam);
     }
 
     get prompting() {
-        // The prompting phase is being overriden so that we can ask our own questions
-        // return {
-        //     askForClient: prompts.askForClient,
-        //     askForClientSideOpts: prompts.askForClientSideOpts,
+        const phaseFromJHipster = super._prompting();
+        const phaseFromSam = {
+            askForTheme: prompts.askForTheme,
+            setSamSharedConfigOptions() {
+                this.configOptions.theme = this.theme;
+            }
+        };
 
-        //     setSharedConfigOptions() {
-        //         this.configOptions.lastQuestion = this.currentQuestion;
-        //         this.configOptions.totalQuestions = this.totalQuestions;
-        //         this.configOptions.clientFramework = this.clientFramework;
-        //         this.configOptions.useSass = this.useSass;
-        //     }
-        // };
-        // If the prompts need to be overriden then use the code commented out above instead
-        return super._prompting();
+        return Object.assign(phaseFromJHipster, phaseFromSam);
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
+        const phaseFromJHipster = super._configuring();
+        const phaseFromSam = {
+            saveSamConfig() {
+                const config = {
+                    theme: this.theme
+                };
+                this.config.set(config);
+            }
+        };
+
+        return Object.assign(phaseFromJHipster, phaseFromSam);
     }
 
     get default() {
