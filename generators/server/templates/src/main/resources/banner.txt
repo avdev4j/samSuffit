@@ -1,0 +1,10 @@
+  ${AnsiColor.GREEN}    ___         _         __  __       ___       _  _       ____      ____     __    ____
+  ${AnsiColor.GREEN}   F __".      /.\       F  \/  ]     F __".    FJ  L]     F ___J    F ___J    FJ   /_  _\
+  ${AnsiColor.GREEN}  J (___|     //_\\     J |\__/| L   J (___|   J |  | L   J |___:   J |___:   J  L  [J  L]
+  ${AnsiColor.GREEN}  J\___ \    / ___ \    | |`--'| |   J\___ \   | |  | |   | _____|  | _____|  |  |   |  |
+  ${AnsiColor.GREEN} .--___) \  / L___J \   F L    J J  .--___) \  F L__J J   F |____J  F |____J  F  J   F  J
+  ${AnsiColor.GREEN} J\______J J__L   J__L J__L    J__L J\______J J\______/F J__F      J__F      J____L J____L
+  ${AnsiColor.GREEN}  J______F |__L   J__| |__L    J__|  J______F  J______F  |__|      |__|      |____| |____|
+
+
+${AnsiColor.BRIGHT_BLUE} Running Spring Boot ${spring-boot.version} :: 🤓 Peter Parker is Spiderman
