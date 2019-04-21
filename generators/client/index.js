@@ -2,7 +2,6 @@
 const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 const writeAngularFiles = require('./files-angular').writeFiles;
-const writeReactFiles = require('./files-react').writeFiles;
 const prompts = require('./prompts');
 
 module.exports = class extends ClientGenerator {
@@ -18,6 +17,8 @@ module.exports = class extends ClientGenerator {
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
+
+        this.delete = this._delete;
     }
 
     get initializing() {
@@ -29,7 +30,7 @@ module.exports = class extends ClientGenerator {
             }
         };
 
-        return Object.assign(phaseFromJHipster, phaseFromSam);
+        return { ...phaseFromJHipster, ...phaseFromSam };
     }
 
     get prompting() {
@@ -41,7 +42,7 @@ module.exports = class extends ClientGenerator {
             }
         };
 
-        return Object.assign(phaseFromJHipster, phaseFromSam);
+        return { ...phaseFromJHipster, ...phaseFromSam };
     }
 
     get configuring() {
@@ -55,7 +56,7 @@ module.exports = class extends ClientGenerator {
             }
         };
 
-        return Object.assign(phaseFromJHipster, phaseFromSam);
+        return { ...phaseFromJHipster, ...phaseFromSam };
     }
 
     get default() {
@@ -68,17 +69,14 @@ module.exports = class extends ClientGenerator {
         /* eslint-disable */
         const phaseFromSam = {
             writeSamFiles() {
-                switch (this.clientFramework) {
-                    case 'react':
-                        return writeReactFiles.call(this);
-                    default:
-                        return writeAngularFiles.call(this);
+                if (this.clientFramework === 'angularX') {
+                    return writeAngularFiles.call(this);
                 }
             }
         };
         /* eslint-enable */
 
-        return Object.assign(phaseFromJHipster, phaseFromSam);
+        return { ...phaseFromJHipster, ...phaseFromSam };
     }
 
     get install() {
@@ -89,5 +87,9 @@ module.exports = class extends ClientGenerator {
     get end() {
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._end();
+    }
+
+    _delete(templatePathFrom, templatePathTo) {
+        this.fs.delete(templatePathTo);
     }
 };

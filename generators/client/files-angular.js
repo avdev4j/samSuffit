@@ -1,5 +1,4 @@
 const constants = require('generator-jhipster/generators/generator-constants');
-const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
@@ -26,7 +25,8 @@ const clientFiles = {
             path: MAIN_SRC_DIR,
             templates: [
                 { file: 'content/images/daily-bugle.png', method: 'copy' },
-                { file: 'content/images/logo-daily.png', method: 'copy' }
+                { file: 'content/images/logo-daily.png', method: 'copy' },
+                { file: 'content/images/logo-jhipster.png', method: 'delete' }
             ]
         }
     ]
@@ -34,9 +34,8 @@ const clientFiles = {
 
 function writeFiles() {
     this.writeFilesToDisk(clientFiles, this, false, 'angular');
-    addGlobalSCSSStyle.call(this, "@import 'daily';");
+    this.addMainSCSSStyle("@import 'daily';", 'add daily bug scss');
     changeJhipsterLogoToDailyLogo.call(this);
-    cleanJhipsterFiles.call(this);
 }
 
 function changeJhipsterLogoToDailyLogo() {
@@ -45,36 +44,6 @@ function changeJhipsterLogoToDailyLogo() {
         "'../../../content/images/logo-jhipster.png'",
         "'../../../content/images/logo-daily.png'"
     );
-}
-
-function cleanJhipsterFiles() {
-    this.fs.delete(`${MAIN_SRC_DIR}content/images/logo-jhipster.png`);
-}
-
-/**
- * TODO remove this when https://github.com/jhipster/generator-jhipster/pull/9078 will be merge.
- */
-function addGlobalSCSSStyle(style, comment) {
-    const fullPath = `${MAIN_SRC_DIR}content/scss/global.scss`;
-    let styleBlock = '';
-    if (comment) {
-        styleBlock += '/* ==========================================================================\n';
-        styleBlock += `${comment}\n`;
-        styleBlock += '========================================================================== */\n';
-    }
-    styleBlock += `${style}\n`;
-    try {
-        jhipsterUtils.rewriteFile(
-            {
-                file: fullPath,
-                needle: 'jhipster-needle-scss-add-main',
-                splicable: [styleBlock]
-            },
-            this
-        );
-    } catch (e) {
-        this.debug('Error:', e);
-    }
 }
 
 module.exports = {

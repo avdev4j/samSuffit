@@ -1,7 +1,7 @@
 {
   "name": "generator-jhipster-samSuffit",
-  "version": "0.0.0",
-  "description": "This is what Sam&#39;s teams need to work at Oscorp",
+  "version": "0.0.1",
+  "description": "This is what Sam&#39;s teams need to work at the daily buggle.",
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
@@ -38,7 +38,7 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "through2": "2.0.3",
-    "generator-jhipster": ">=5.4.0",
+    "generator-jhipster": "5.8.2",
     "yeoman-environment": "2.3.0",
     "yeoman-generator": "2.0.5"
   },
